@@ -1,2 +1,2 @@
 0001-Remove-remote-images-traking-code-and-ads.patch
-0002-Temporary-exclude-requests.codes.patch
+0002-Fix-tests-with-HTTP-proxy.patch
