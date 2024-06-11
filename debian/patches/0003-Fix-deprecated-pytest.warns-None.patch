@@ -1,0 +1,24 @@
+From: =?utf-8?q?Timo_R=C3=B6hling?= <roehling@debian.org>
+Date: Thu, 16 May 2024 17:21:51 +0200
+Subject: Fix deprecated pytest.warns(None)
+
+Origin: upstream, https://github.com/psf/requests/commit/cc23d1c6445d61c1e6905cae4861d6e3c3244274
+Bug: https://github.com/psf/requests/issues/6679
+Bug-Debian: https://bugs.debian.org/1063985
+---
+ tests/test_requests.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_requests.py b/tests/test_requests.py
+index 027fc00..348d95d 100644
+--- a/tests/test_requests.py
++++ b/tests/test_requests.py
+@@ -1012,7 +1012,7 @@ class TestRequests:
+                 "SubjectAltNameWarning",
+             )
+ 
+-        with pytest.warns(None) as warning_records:
++        with pytest.warns() as warning_records:
+             warnings.simplefilter("always")
+             requests.get(f"https://localhost:{port}/", verify=ca_bundle)
+ 
