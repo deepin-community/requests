@@ -3,6 +3,17 @@
 export PYBUILD_NAME=requests
 export PYBUILD_TEST_PYTEST=1
 export PYTHONWARNINGS=d
+export PYBUILD_BEFORE_TEST=\
+	set -e; \
+	rm -rf {dir}/debian/certs.orig; \
+	cp -a {dir}/tests/certs {dir}/debian/certs.orig; \
+	for cert in expired mtls valid/server; do \
+		$(MAKE) -C "{dir}/tests/certs/$$cert" clean all; \
+	done
+export PYBUILD_AFTER_TEST=\
+	set -e; \
+	rm -rf {dir}/tests/certs; \
+	mv {dir}/debian/certs.orig {dir}/tests/certs
 TESTS_TO_EXCLUDE="not test_use_proxy_from_environment and \
 not TestGetEnvironProxies and \
 not test_mixed_case_scheme_acceptable and \
@@ -113,14 +124,14 @@ BUILD_DATE  = $(shell LC_ALL=C date -u "+%B %d, %Y" -d "@$(SOURCE_DATE_EPOCH)")
 SPHINXOPTS := -D html_last_updated_fmt="$(BUILD_DATE)"
 
 %:
-	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
+	dh $@ --with sphinxdoc --buildsystem=pybuild
 
 override_dh_installchangelogs:
 	dh_installchangelogs HISTORY.md
 
 override_dh_sphinxdoc:
 ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
-	PYTHONPATH=. python3 -m sphinx $(SPHINXOPTS) -N -bhtml docs/ \
+	PYTHONPATH=src python3 -m sphinx $(SPHINXOPTS) -N -bhtml docs/ \
 		debian/python-requests-doc/usr/share/doc/python-requests-doc/html/
 
 	dh_sphinxdoc

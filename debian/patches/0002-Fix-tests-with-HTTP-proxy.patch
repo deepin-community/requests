@@ -1,17 +1,24 @@
-Description: Fix autopkgtest when HTTP/HTTPS proxy is set
- The pytest suite does not expect the http_proxy, https_proxy and no_proxy
- variables to be present in the environment. They make pytest fail and
- therefore autopkgtest fail as well.
-Author: Olivier Gayot <olivier.gayot@canonical.com>
-Bug: <URL to the upstream bug report if any, implies patch has been forwarded, optional>
+From: Olivier Gayot <olivier.gayot@canonical.com>
+Date: Thu, 13 Jun 2024 09:56:35 +0100
+Subject: Fix autopkgtest when HTTP/HTTPS proxy is set
+
+The pytest suite does not expect the http_proxy, https_proxy and no_proxy
+variables to be present in the environment. They make pytest fail and
+therefore autopkgtest fail as well.
+
 Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/requests/+bug/1974182
 Forwarded: no
 Last-Update: 2022-05-19
 ---
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+ tests/test_requests.py | 15 ++++++++-------
+ tests/utils.py         |  3 ++-
+ 2 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/tests/test_requests.py b/tests/test_requests.py
+index b4e9fe9..b6e7b18 100644
 --- a/tests/test_requests.py
 +++ b/tests/test_requests.py
-@@ -579,8 +579,9 @@
+@@ -579,8 +579,9 @@ class TestRequests:
          ),
      )
      def test_errors(self, url, exception):
@@ -23,7 +30,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
  
      def test_proxy_error(self):
          # any proxy related error (address resolution, no route to host, etc) should result in a ProxyError
-@@ -603,14 +604,14 @@
+@@ -603,14 +604,14 @@ class TestRequests:
              requests.get(httpbin(), proxies={"http": "http:///example.com:8080"})
  
      def test_respect_proxy_env_on_send_self_prepared_request(self, httpbin):
@@ -40,7 +47,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
              with pytest.raises(ProxyError):
                  session = requests.Session()
                  request = requests.Request("GET", httpbin())
-@@ -618,7 +619,7 @@
+@@ -618,7 +619,7 @@ class TestRequests:
                  session.send(prepared)
  
      def test_respect_proxy_env_on_send_with_redirects(self, httpbin):
@@ -49,7 +56,7 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
              with pytest.raises(ProxyError):
                  session = requests.Session()
                  url = httpbin("redirect/1")
-@@ -627,13 +628,13 @@
+@@ -627,13 +628,13 @@ class TestRequests:
                  session.send(request.prepare())
  
      def test_respect_proxy_env_on_get(self, httpbin):
@@ -65,9 +72,11 @@ This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
              with pytest.raises(ProxyError):
                  session = requests.Session()
                  session.request(method="GET", url=httpbin())
+diff --git a/tests/utils.py b/tests/utils.py
+index 6cb75bf..7871a32 100644
 --- a/tests/utils.py
 +++ b/tests/utils.py
-@@ -7,7 +7,8 @@
+@@ -7,7 +7,8 @@ def override_environ(**kwargs):
      save_env = dict(os.environ)
      for key, value in kwargs.items():
          if value is None:
