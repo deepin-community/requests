@@ -1,3 +1,39 @@
+requests (2.32.3+dfsg-4) unstable; urgency=medium
+
+  * Team upload.
+  * Upload to unstable.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 17 Feb 2025 13:10:15 +0000
+
+requests (2.32.3+dfsg-3) experimental; urgency=medium
+
+  * Team upload.
+  * Regenerate test certificates before running tests (closes: #1091503).
+  * Switch to autopkgtest-pkg-pybuild.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 17 Feb 2025 12:50:27 +0000
+
+requests (2.32.3+dfsg-2) experimental; urgency=medium
+
+  * Team upload to experimental to generate more Pseudo-Excuse for urllib3.
+  * Set Rules-Requires-Root: no
+  * Use dh-sequence-python3
+
+ -- Alexandre Detiste <tchet@debian.org>  Sun, 24 Nov 2024 20:34:48 +0100
+
+requests (2.32.3+dfsg-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release:
+    - CVE-2024-35195: Fixed an issue where setting `verify=False` on the
+      first request from a Session will cause subsequent requests to the
+      _same origin_ to also ignore cert verification, regardless of the
+      value of `verify` (closes: #1071593).
+  * Use pybuild-plugin-pyproject.
+  * Standards-Version: 4.7.0 (no changes required).
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 13 Jun 2024 11:53:38 +0100
+
 requests (2.31.0+dfsg-2) unstable; urgency=medium
 
   * Team upload.
