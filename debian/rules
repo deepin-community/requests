@@ -120,8 +120,10 @@ not test_header_with_subclass_types and \
 not test_urllib3_pool_connection_closed"
 export PYBUILD_TEST_ARGS=tests -k ${TESTS_TO_EXCLUDE}
 
+ifneq ($(PYBUILD_AUTOPKGTEST),1)
 BUILD_DATE  = $(shell LC_ALL=C date -u "+%B %d, %Y" -d "@$(SOURCE_DATE_EPOCH)")
 SPHINXOPTS := -D html_last_updated_fmt="$(BUILD_DATE)"
+endif
 
 %:
 	dh $@ --with sphinxdoc --buildsystem=pybuild
