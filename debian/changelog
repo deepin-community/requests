@@ -1,3 +1,18 @@
+requests (2.32.4+dfsg-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * Avoid harmless "date: invalid date '@'" error in autopkgtest.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 18 Aug 2025 11:18:19 +0100
+
+requests (2.32.3+dfsg-5) unstable; urgency=medium
+
+  * Team upload.
+  * Mark pytest to be test-only.
+
+ -- Bastian Germann <bage@debian.org>  Mon, 24 Mar 2025 07:38:07 +0100
+
 requests (2.32.3+dfsg-4) unstable; urgency=medium
 
   * Team upload.
